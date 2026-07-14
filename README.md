@@ -28,8 +28,7 @@ git clone https://github.com/Varshith-JV-1410/memprocfs-mcp.git
 cd memprocfs-mcp
 
 # Run the setup script (automatically installs dependencies)
-py -3.12 setup.py
-# Or: python setup.py
+python setup.py
 ```
 
 The setup script will:
@@ -51,44 +50,24 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Running the Server
-
 ```bash
-# Direct execution
 python server.py
-
-# Or using uv
-uv run server.py
-```
-
-### Testing with MCP Inspector
-
-```bash
-uv run mcp dev server.py
-```
-
-### Installing to Claude Desktop
-
-```bash
-uv run mcp install server.py
 ```
 
 ## MCP Configuration
 
 ### For VS Code (GitHub Copilot)
 
-Add to your VS Code settings:
+Add to your VS Code settings (`mcp.json`):
 
 ```json
 {
-  "mcpServers": {
-    "memprocfs-mcp": {
-      "command": "python",
-      "args": ["f:\\mcp\\memprocfs-mcp\\server.py"],
-      "type": "stdio",
-      "env": {
-        "PYTHONPATH": "f:\\mcp\\memprocfs-mcp"
-      }
+  "memprocfs-mcp": {
+    "command": "python",
+    "args": ["/path/to/memprocfs-mcp/server.py"],
+    "type": "stdio",
+    "env": {
+      "PYTHONPATH": "/path/to/memprocfs-mcp"
     }
   }
 }
@@ -100,17 +79,17 @@ Add to `claude_desktop_config.json`:
 
 ```json
 {
-  "mcpServers": {
-    "memprocfs-mcp": {
-      "command": "python",
-      "args": ["f:\\mcp\\memprocfs-mcp\\server.py"],
-      "env": {
-        "PYTHONPATH": "f:\\mcp\\memprocfs-mcp"
-      }
+  "memprocfs-mcp": {
+    "command": "python",
+    "args": ["/path/to/memprocfs-mcp/server.py"],
+    "env": {
+      "PYTHONPATH": "/path/to/memprocfs-mcp"
     }
   }
 }
 ```
+
+> Replace `/path/to/memprocfs-mcp/` with the actual path to this project. Run `python setup.py` to get the exact configuration for your system.
 
 ## Available Tools
 
@@ -126,7 +105,7 @@ Add to `claude_desktop_config.json`:
 | `get_drivers` | List loaded kernel drivers |
 | `get_analysis_context` | Get session state |
 | `save_report` | Save analysis report |
-| `exec_command` | Execute advanced commands (VFS, services, users, kernel objects, pool tags, process details) |
+| `exec_command` | Execute advanced commands |
 
 ## exec_command Sub-Commands
 
@@ -142,57 +121,6 @@ Add to `claude_desktop_config.json`:
 | `get_kernel_build` | Get kernel build number | - |
 | `list_vfs_files` | List VFS files with details | `path` (optional) |
 
-## Example Usage
-
-```
-User: Load the memory image at F:\memory-forensics\chall1.mem
-Assistant: [calls load_memory_image tool]
-User: List all processes
-Assistant: [calls list_processes tool]
-User: Analyze process 7532
-Assistant: [calls analyze_process tool with pid=7532]
-User: List Windows services
-Assistant: [calls exec_command with command=list_services]
-User: Read the cmdline of process 7532
-Assistant: [calls exec_command with command=get_process_details, pid=7532, detail=cmdline]
-```
-
-## Development
-
-### Project Structure
-
-```
-memprocfs-mcp/
-├── server.py           # Main MCP server (11 tools)
-├── setup.py            # Automated setup script
-├── memprocfs/          # MemProcFS binaries
-├── reports/            # Analysis reports
-├── pyproject.toml      # Project configuration
-├── .gitignore
-└── README.md
-```
-
-### Adding New Tools
-
-To add a new tool, use the `@mcp.tool()` decorator:
-
-```python
-@mcp.tool()
-def my_new_tool(param1: str, param2: int = 0) -> str:
-    """
-    Description of what the tool does.
-    
-    Args:
-        param1: Description of param1
-        param2: Description of param2
-    
-    Returns:
-        Description of return value
-    """
-    # Implementation
-    return json.dumps({"result": "..."})
-```
-
 ## License
 
-GNU Affero General Public License v3.0
+[GNU Affero General Public License v3.0](LICENSE)
