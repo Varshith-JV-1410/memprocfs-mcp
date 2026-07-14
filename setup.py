@@ -149,27 +149,23 @@ def find_memprocfs():
 
 
 def check_dependencies(python_cmd):
-    """Check and install dependencies."""
+    """Check and install dependencies from requirements.txt."""
     print_step(2, "Checking Dependencies")
     
-    deps = ["mcp[cli]", "pydantic"]
-    all_ok = True
+    requirements_file = Path(__file__).parent / "requirements.txt"
+    if not requirements_file.exists():
+        print_fail(f"requirements.txt not found at: {requirements_file}")
+        return False
     
-    for dep in deps:
-        # Check if installed
-        ok, out, _ = run_command(f'{python_cmd} -c "import {dep.split("[")[0].replace("-", "_")}"; print(\'ok\')')
-        if ok and "ok" in out:
-            print_ok(f"{dep} already installed")
-        else:
-            print_warn(f"{dep} not found, installing...")
-            ok, out, err = run_command(f'{python_cmd} -m pip install "{dep}"')
-            if ok:
-                print_ok(f"{dep} installed successfully")
-            else:
-                print_fail(f"Failed to install {dep}: {err}")
-                all_ok = False
-    
-    return all_ok
+    # Install from requirements.txt
+    print_info(f"Installing from {requirements_file.name}...")
+    ok, out, err = run_command(f'{python_cmd} -m pip install -r "{requirements_file}"')
+    if ok:
+        print_ok("All dependencies installed successfully")
+        return True
+    else:
+        print_fail(f"Failed to install dependencies: {err}")
+        return False
 
 
 # ─── Main Setup ────────────────────────────────────────────────────────────────

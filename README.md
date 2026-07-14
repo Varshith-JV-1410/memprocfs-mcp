@@ -19,7 +19,6 @@ A Model Context Protocol (MCP) server for memory forensics analysis using MemPro
 
 - Python 3.10+
 - MemProcFS binaries (download separately)
-- MCP SDK (installed automatically)
 
 ### Quick Setup
 
@@ -35,15 +34,15 @@ py -3.12 setup.py
 
 The setup script will:
 1. Check Python version (requires 3.10+)
-2. Install required dependencies (mcp, pydantic)
+2. Install dependencies from `requirements.txt`
 3. Verify MemProcFS installation
 4. Provide exact MCP configuration for VS Code and Claude Desktop
 
 ### Manual Setup
 
 ```bash
-# Install dependencies
-pip install "mcp[cli]" pydantic
+# Install dependencies from requirements.txt
+pip install -r requirements.txt
 
 # Download MemProcFS from:
 # https://github.com/ufrisk/MemProcFS/releases/latest
